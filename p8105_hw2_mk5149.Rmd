@@ -120,12 +120,37 @@ mr_trash_wheel_df =
   clean_names() |>
   drop_na(dumpster) |>
   mutate(
+    year = as.integer(year),
     sports_balls = as.integer(round(sports_balls)),
     trash_wheel_name = "Mr. Trash Wheel"
   )
 mr_trash_wheel_df
 ```
 
+Next, we apply the exact same cleaning logic to the data for "Professor Trash Wheel" and "Gwynnda Trash Wheel".
+```{r}
+# Clean Professor Trash Wheel data
+professor_trash_wheel_df = 
+  read_excel(file_path, sheet = "Professor Trash Wheel", skip = 1) |>
+  clean_names() |>
+  drop_na(dumpster) |>
+  mutate(
+    year = as.integer(year),
+    trash_wheel_name = "Professor Trash Wheel"
+  )
+professor_trash_wheel_df
+
+# Clean Gwynnda Trash Wheel data
+gwynnda_trash_wheel_df = 
+  read_excel(file_path, sheet = "Gwynnda Trash Wheel", skip = 1) |>
+  clean_names() |>
+  drop_na(dumpster) |>
+  mutate(
+    year = as.integer(year),
+    trash_wheel_name = "Gwynnda, the Good Wheel of the West"
+  )
+gwynnda_trash_wheel_df
+```
 
 
 
