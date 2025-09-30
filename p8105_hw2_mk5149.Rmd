@@ -187,6 +187,48 @@ Answer: The total number of cigarette butts collected was `r all_trash_wheel_dat
 # Problem 3
 This problem analyzes Zillow's Observed Rent Index (ZORI) for New York City from 2015 to 2024. We will import and combine Zillow's rental price data with a separate file containing NYC ZIP code and neighborhood information. The goal is to create a single, tidy dataset to explore rental price trends, particularly during the COVID-19 pandemic.
 
+The first step is to import, clean, and merge the two datasets. The Zillow data is in a "wide" format and needs to be reshaped, while the ZIP code data needs minor cleaning before they can be joined.
+```{r}
+# Import the Zillow and ZIP code datasets
+zillow_df <- read_csv("zillow_data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv")
+zip_codes_df <- read_csv("zillow_data/Zip Codes.csv")
+
+# Clean and tidy the Zillow rental data
+zori_tidy <- zillow_df |>
+  pivot_longer(
+    cols = starts_with("20"),
+    names_to = "date",
+    values_to = "zori"
+  ) |>
+  mutate(
+    date = ymd(date),
+    # Ensure ZIP code is a character for a safe merge
+    zip_code = as.character(RegionName) 
+  ) |>
+  select(zip_code, date, zori)
+zori_tidy
+
+# Clean the ZIP code information dataset
+# Clean the ZIP code information dataset (Corrected)
+zip_info_tidy <- zip_codes_df |>
+  clean_names() |>
+  mutate(zip_code = as.character(zip_code))
+zip_info_tidy
+
+# Join the two datasets to create the final, organized dataset
+nyc_zori_final <- left_join(zori_tidy, zip_info_tidy, by = "zip_code") |>
+  # Reorder columns for clarity
+  select(zip_code, county, neighborhood, date, zori) |>
+  # Order observations meaningfully
+  arrange(zip_code, date)
+nyc_zori_final
+```
+The resulting tidy dataset combines rental price data with geographic information for New York City. Each observation represents the Zillow Observed Rent Index for a single ZIP code on a given month. The dataset includes a total of `r nrow(nyc_zori_final)` observations. It covers `r n_distinct(nyc_zori_final$zip_code)` unique ZIP codes and `r n_distinct(nyc_zori_final$neighborhood)` unique neighborhoods across the five boroughs. Key variables include `zip_code`, `county`, `neighborhood`, `date`, and the rental index `zori`. 
+Specifically,
+```{r}
+glimpse(nyc_zori_final)
+```
+
 
 
 
