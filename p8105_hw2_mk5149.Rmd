@@ -80,6 +80,10 @@ fivethirtyeight_df =
 glimpse(fivethirtyeight_df)
 ```
 
+The three raw datasets from FiveThirtyEight provided distinct economic and political metrics over time. The `pols-month.csv` dataset contained monthly presidential approval ratings from 1947 to 2017, with indicators for the president's political party. The `snp.csv` dataset included the monthly closing value of the S&P 500 index. Lastly, the `unemployment.csv` dataset was in a wide format, listing the national unemployment rate for each month in separate columns, covering years from 1948 to 2015. 
+
+After cleaning and tidying, these were merged into a single data frame. The resulting dataset has 822 rows and 11 columns, spanning the years 1947 to 2015. The key variables in the final tidy dataset are `year`, `month`, `gov_gop`, `president_party`, `snp_close`, and `unemployment_rat`e, providing a unified view of political and economic indicators suitable for time-series analysis.
+
 
 
 
