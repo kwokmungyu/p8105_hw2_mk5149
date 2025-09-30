@@ -64,7 +64,20 @@ unemployment_clean =
     cols = Jan:Dec,
     names_to = "month",
     values_to = "unemployment_rate"
-  )
+  ) |> 
+  rename(year = Year) # Add this line to fix the capitalization, which will cause error in the later part (merging the data)
+```
+
+For the final part of problem 1, we will join the datasets by merging `snp` into `pols`, and merging `unemployment` into the result.
+```{r}
+fivethirtyeight_df = 
+  pols_clean |>
+  left_join(snp_clean, by = c("year","month")) |>
+  left_join(unemployment_clean, by = c("year", "month"))
+#left_join: based on shared columns, if no matches -> NA
+
+# View a glimpse of the final merged data
+glimpse(fivethirtyeight_df)
 ```
 
 
