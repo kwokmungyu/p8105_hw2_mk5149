@@ -246,8 +246,39 @@ The `anti_join` reveals `r nrow(missing_zips)` ZIP codes that appear in the NYC 
 In general, ZIP codes are excluded from the Zillow dataset if they are not primarily residential areas, have too few rental transactions to create a reliable index, or are special-purpose ZIP codes for landmarks, airports, or large commercial buildings.
 
 
+For the last part of problem 3, to analyze the impact of the COVID-19 pandemic, we compare rental prices in January 2021 to those in January 2020. The table below shows the 10 ZIP codes with the largest absolute drop in the Zillow Observed Rent Index during this period.
+```{r}
+# Filter for Jan 2020 and Jan 2021, and calculate the price drop
+price_drop_df <- nyc_zori_final |>
+  filter(
+    date == ymd("2020-01-31") | date == ymd("2021-01-31")
+  ) |>
+  pivot_wider(
+    names_from = date,
+    values_from = zori
+  ) |>
+  clean_names() |>
+  mutate(
+    price_drop = x2020_01_31 - x2021_01_31
+  ) |>
+  # Remove entries where data for one of the dates was missing
+  drop_na(price_drop)
 
+# Create a table of the top 10 ZIP codes with the largest price drop
+top_10_drops <- price_drop_df |>
+  arrange(desc(price_drop)) |>
+  head(10) |>
+  select(zip_code, county, neighborhood, price_drop)
 
+# Use kable for a nicely formatted table
+kable(
+  top_10_drops,
+  col.names = c("ZIP Code", "County", "Neighborhood", "Price Drop ($)"),
+  caption = "Top 10 ZIP Codes by Largest Rent Decrease (Jan 2020 to Jan 2021)",
+  digits = 2
+)
+```
+The table clearly shows that the 10 ZIP codes with the most significant drop in rental prices are all located in Manhattan, specifically in and around the Financial District, Midtown, and other high-end neighborhoods like Chelsea and the West Village. This aligns with the widely reported trend of residents moving out of Manhattan's expensive core during the height of the COVID-19 pandemic, driven by the shift to remote work and a desire for more space. The areas that were previously most in-demand due to their proximity to offices and entertainment saw the largest immediate impact on rental demand, leading to a substantial, albeit temporary, drop in prices.
 
 
 
