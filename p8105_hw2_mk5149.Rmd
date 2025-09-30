@@ -166,6 +166,29 @@ all_trash_wheel_data
 glimpse(all_trash_wheel_data)
 ```
 
+The final combined dataset provides a comprehensive look at the trash collected by Baltimore's trash wheels. It contains a total of `r nrow(all_trash_wheel_data)` dumpster collection records. Key variables include `trash_wheel_name`, `weight_tons`, and counts of specific items like `plastic_bottles` and `cigarette_butts`. Specifically,
+```{r}
+summary(all_trash_wheel_data)
+```
+
+
+From this unified dataset, we can answer the specific questions posed in the Assignment 2:  
+
+1. What was the total weight of trash collected by Professor Trash Wheel?  
+
+Answer: The total weight collected was `r all_trash_wheel_data |> filter(trash_wheel_name == "Professor Trash Wheel") |> summarize(total_weight = sum(weight_tons, na.rm = TRUE)) |> pull(total_weight) |> round(2)` tons.  
+
+2. What was the total number of cigarette butts collected by Gwynnda in June of 2022?  
+
+Answer: The total number of cigarette butts collected was `r all_trash_wheel_data |> filter(trash_wheel_name == "Gwynnda, the Good Wheel of the West", year == 2022, month == "June") |> pull(cigarette_butts)`.  
+
+
+
+
+
+
+
+
 
 
 
