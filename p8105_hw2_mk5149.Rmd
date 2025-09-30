@@ -53,6 +53,19 @@ snp_clean =
   select(year, month, snp_close = close)
 ```
 
+Thirdly, we will tidy the unemployment data so that it can be merged with the previous datasets. 
+This process will involve switching from “wide” to “long” format; 
+ensuring that key variables have the same name; 
+and ensuring that key variables take the same values.
+```{r}
+unemployment_clean = 
+  unemployment_df |>
+  pivot_longer(
+    cols = Jan:Dec,
+    names_to = "month",
+    values_to = "unemployment_rate"
+  )
+```
 
 
 
