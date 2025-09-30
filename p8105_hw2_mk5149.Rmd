@@ -151,7 +151,20 @@ gwynnda_trash_wheel_df =
   )
 gwynnda_trash_wheel_df
 ```
+  
+With all three data frames cleaned and uniformly structured, we stack them into a single, tidy dataset using `bind_rows()`. The `sports_balls` column will correctly show NA for the trash wheels that do not collect that data.
+```{r}
+all_trash_wheel_data <- 
+  bind_rows(
+    mr_trash_wheel_df, 
+    professor_trash_wheel_df, 
+    gwynnda_trash_wheel_df
+  )
+all_trash_wheel_data
 
+# Use glimpse() to see the structure of the final combined data frame
+glimpse(all_trash_wheel_data)
+```
 
 
 
