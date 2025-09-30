@@ -36,7 +36,7 @@ pols_clean =
     )
   ) |>
   select(-day, -prez_gop, -prez_dem) # Removes only the day, prez_gop, and prez_dem columns
-
+pols_clean
 ```
 
 Secondly, we will clean the data in `snp.csv` by using a similar process to the above. 
@@ -51,6 +51,7 @@ snp_clean =
       as.character()
   ) |>
   select(year, month, snp_close = close)
+snp_clean
 ```
 
 Thirdly, we will tidy the unemployment data so that it can be merged with the previous datasets. 
@@ -66,6 +67,7 @@ unemployment_clean =
     values_to = "unemployment_rate"
   ) |> 
   rename(year = Year) # Add this line to fix the capitalization, which will cause error in the later part (merging the data)
+unemployment_clean
 ```
 
 For the final part of problem 1, we will join the datasets by merging `snp` into `pols`, and merging `unemployment` into the result.
@@ -75,15 +77,31 @@ fivethirtyeight_df =
   left_join(snp_clean, by = c("year","month")) |>
   left_join(unemployment_clean, by = c("year", "month"))
 #left_join: based on shared columns, if no matches -> NA
-
-# View a glimpse of the final merged data
-glimpse(fivethirtyeight_df)
 ```
 
 The three raw datasets from FiveThirtyEight provided distinct economic and political metrics over time. The `pols-month.csv` dataset contained monthly presidential approval ratings from 1947 to 2017, with indicators for the president's political party. The `snp.csv` dataset included the monthly closing value of the S&P 500 index. Lastly, the `unemployment.csv` dataset was in a wide format, listing the national unemployment rate for each month in separate columns, covering years from 1948 to 2015. 
 
-After cleaning and tidying, these were merged into a single data frame. The resulting dataset has 822 rows and 11 columns, spanning the years 1947 to 2015. The key variables in the final tidy dataset are `year`, `month`, `gov_gop`, `president_party`, `snp_close`, and `unemployment_rat`e, providing a unified view of political and economic indicators suitable for time-series analysis.
+For the specific information for these 3 datasets, please refer to the summary below: 
+```{r}
+summary(pols_clean)
+```
 
+```{r}
+summary(snp_clean)
+```
+
+```{r}
+summary(unemployment_clean)
+```
+
+
+After cleaning and tidying, these were merged into a single data frame. The resulting dataset has 822 rows and 11 columns, spanning the years 1947 to 2015. The key variables in the final tidy dataset are `year`, `month`, `gov_gop`, `president_party`, `snp_close`, and `unemployment_rate`, providing a unified view of political and economic indicators suitable for time-series analysis.
+```{r}
+# View a glimpse of the final merged data
+glimpse(fivethirtyeight_df)
+```
+
+# Problem 2
 
 
 
