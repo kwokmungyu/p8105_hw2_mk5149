@@ -103,6 +103,30 @@ After cleaning and tidying, these were merged into a single data frame. The resu
 glimpse(fivethirtyeight_df)
 ```
 
+# Problem 2
+We begin by importing the data for "Mr. Trash Wheel". The cleaning process involves several key steps:  
+1. We use `read_excel()` and specify the sheet name (Mr. Trash Wheel sheet). We also skip = 1 to ignore the non-data title row in the file.  
+2. `clean_names()` converts messy column headers (like "Weight (tons)") into a standard snake_case format (e.g., `weight_tons`).  
+3. `drop_na(dumpster)` removes rows that are not actual dumpster collections (like monthly totals or notes).  
+4. We round the `sports_balls` count to the nearest whole number and convert it to an integer.  
+5. Finally, we add a `trash_wheel_name` column to identify the data source.  
+```{r}
+# Define the path to the data file
+file_path = "problem2_datasets/202409 Trash Wheel Collection Data.xlsx"
+
+# Clean Mr. Trash Wheel data
+mr_trash_wheel_df = 
+  read_excel(file_path, sheet = "Mr. Trash Wheel", skip = 1) |>
+  clean_names() |>
+  drop_na(dumpster) |>
+  mutate(
+    sports_balls = as.integer(round(sports_balls)),
+    trash_wheel_name = "Mr. Trash Wheel"
+  )
+mr_trash_wheel_df
+```
+
+
 
 
 
