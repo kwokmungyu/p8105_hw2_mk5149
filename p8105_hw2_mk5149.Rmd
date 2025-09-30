@@ -229,6 +229,21 @@ Specifically,
 glimpse(nyc_zori_final)
 ```
 
+For the second step, not all ZIP codes in New York City have corresponding rental data in the Zillow dataset. We can identify these missing ZIP codes using an `anti_join`, it will return all rows from x without a match in y.
+```{r}
+missing_zips <- anti_join(zip_info_tidy, zori_tidy, by = "zip_code")
+missing_zips
+```
+
+The `anti_join` reveals `r nrow(missing_zips)` ZIP codes that appear in the NYC ZIP code list but not in the Zillow dataset. A few illustrative examples help explain why this might be the case:  
+
+1. 10004 (Financial District, Manhattan): While it contains residential buildings like apartments, this ZIP code is dominated by commercial office space, ferries (Staten Island Ferry), and tourist attractions (the Statue of Liberty, Ellis Island). The low volume of purely residential rental units may not be sufficient for Zillow to create a stable rental index.  
+
+2. 10007 (Financial District, Manhattan): This ZIP code covers the World Trade Center complex and City Hall Park. Like 10004, it is a mix of commercial, government, and high-end residential buildings, which may lead to insufficient or non-representative rental data.  
+
+3. 11430 (Jamaica, Queens): This ZIP code is exclusively for John F. Kennedy International Airport. As it contains no residential addresses, it is correctly excluded from a residential rental index.  
+
+In general, ZIP codes are excluded from the Zillow dataset if they are not primarily residential areas, have too few rental transactions to create a reliable index, or are special-purpose ZIP codes for landmarks, airports, or large commercial buildings.
 
 
 
