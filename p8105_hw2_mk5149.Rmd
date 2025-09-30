@@ -39,6 +39,19 @@ pols_clean =
 
 ```
 
+Secondly, we will clean the data in `snp.csv` by using a similar process to the above. 
+For consistency across datasets, arrange according to year and month, and organize so that `year` and `month` are the leading columns.
+```{r}
+snp_clean = 
+  snp_df |>
+  mutate(
+    date = mdy(date),
+    year = year(date),
+    month = month(date, label = TRUE, abbr = TRUE) |>
+      as.character()
+  ) |>
+  select(year, month, snp_close = close)
+```
 
 
 
