@@ -4,7 +4,7 @@ author: "Mungyu Kwok"
 date: "2025-09-30"
 output: github_document
 ---
-
+# Preparation
 Firstly, we will load any necessary packages.
 ```{r}
 library(tidyverse)
@@ -17,5 +17,36 @@ pols_df = read_csv("fivethirtyeight_datasets/pols-month.csv")
 snp_df = read_csv("fivethirtyeight_datasets/snp.csv")
 unemployment_df = read_csv("fivethirtyeight_datasets/unemployment.csv")
 ```
+
+# Problem 1
+First, clean the data in `pols-month.csv`. 
+We will use the `separate()` function to break up the variable `mon` into integer variables `year`, `month`, and `day`.
+Then, we will replace month number with month name; 
+We will also create a president variable taking values `gop` and `dem`, and remove `prez_dem` and `prez_gop`; 
+Finally, we will remove the `day` variable.
+```{r}
+pols_clean = 
+  pols_df |>
+  separate(mon, into = c("year","month","day"), sep = '-', convert = TRUE) |> 
+  mutate(
+    month = month.abb[month], #buildt-in R constant
+    president_party = case_when(
+      prez_gop == 1 ~ "gop",
+      prez_dem == 1 ~ "dem"
+    )
+  ) |>
+  select(-day, -prez_gop, -prez_dem) # Removes only the day, prez_gop, and prez_dem columns
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
