@@ -9,7 +9,6 @@ Firstly, we will load any necessary packages.
 ```{r}
 library(tidyverse)
 library(lubridate)
-
 library(readxl)
 library(janitor)
 ```
