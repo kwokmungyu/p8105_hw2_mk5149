@@ -5,4 +5,17 @@ date: "2025-09-30"
 output: github_document
 ---
 
+Firstly, we will load any necessary packages.
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+Next, we will load the datasets (Fivethirtyeight), and save them into dataframe.
+```{r}
+pols_df = read_csv("fivethirtyeight_datasets/pols-month.csv")
+snp_df = read_csv("fivethirtyeight_datasets/snp.csv")
+unemployment_df = read_csv("fivethirtyeight_datasets/unemployment.csv")
+```
+
 
