@@ -48,13 +48,24 @@ For consistency across datasets, arrange according to year and month, and organi
 ```{r}
 snp_clean = 
   snp_df |>
+  # 1. To be safe, first ensure the date column is in character format
+  mutate(date_str = as.character(date)) |>
+  # 2. Split the date string by "/" into month, day, and year columns
+  separate(date_str, into = c("month_val", "day_val", "year_val"), sep = "/", remove = FALSE) |>
+  # 3. Convert the year from a character to a number
+  mutate(year_num = as.numeric(year_val)) |>
+  # 4. Manually fix the century: if the 2-digit year is > 25 (a reasonable cutoff), assume it's a 19xx year; otherwise, assume it's a 20xx year
+  mutate(full_year = ifelse(year_num > 25, 1900 + year_num, 2000 + year_num)) |>
+  # 5. Create a new, correct date using the fixed full year and the original month and day
+  mutate(corrected_date = make_date(year = full_year, month = month_val, day = day_val)) |>
+  # 6. From this corrected date, extract the final year and month we need
   mutate(
-    date = mdy(date),
-    year = year(date),
-    month = month(date, label = TRUE, abbr = TRUE) |>
-      as.character()
+    year = year(corrected_date),
+    month = month(corrected_date, label = TRUE, abbr = TRUE) |> as.character()
   ) |>
+  # 7. Finally, select only the required columns
   select(year, month, snp_close = close)
+
 snp_clean
 ```
 
@@ -114,7 +125,7 @@ We begin by importing the data for "Mr. Trash Wheel". The cleaning process invol
 5. Finally, we add a `trash_wheel_name` column to identify the data source.  
 ```{r}
 # Define the path to the data file
-file_path = "problem2_datasets/202409 Trash Wheel Collection Data.xlsx"
+file_path = "problem2_datasets/202509 Trash Wheel Collection Data.xlsx"
 
 # Clean Mr. Trash Wheel data
 mr_trash_wheel_df = 
@@ -144,7 +155,7 @@ professor_trash_wheel_df
 
 # Clean Gwynnda Trash Wheel data
 gwynnda_trash_wheel_df = 
-  read_excel(file_path, sheet = "Gwynnda Trash Wheel", skip = 1) |>
+  read_excel(file_path, sheet = "Gwynns Falls Trash Wheel", skip = 1) |>
   clean_names() |>
   drop_na(dumpster) |>
   mutate(
