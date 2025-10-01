@@ -219,12 +219,14 @@ zori_tidy <- zillow_df |>
   select(zip_code, date, zori)
 zori_tidy
 
-# Clean the ZIP code information dataset
-# Clean the ZIP code information dataset (Corrected)
+# Clean the ZIP code information dataset 
 zip_info_tidy <- zip_codes_df |>
   clean_names() |>
+  # Keep only the first occurrence of each ZIP code, remove duplicates
+  distinct(zip_code, .keep_all = TRUE) |> 
   mutate(zip_code = as.character(zip_code))
-zip_info_tidy
+# janitor::get_dupes(zip_info_tidy, zip_code)
+
 
 # Join the two datasets to create the final, organized dataset
 nyc_zori_final <- left_join(zori_tidy, zip_info_tidy, by = "zip_code") |>
