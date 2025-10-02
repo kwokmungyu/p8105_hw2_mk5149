@@ -193,7 +193,7 @@ Answer: The total weight collected was `r all_trash_wheel_data |> filter(trash_w
 
 2. What was the total number of cigarette butts collected by Gwynnda in June of 2022?  
 
-Answer: The total number of cigarette butts collected was `r all_trash_wheel_data |> filter(trash_wheel_name == "Gwynnda, the Good Wheel of the West", year == 2022, month == "June") |> pull(cigarette_butts)`.  
+Answer: The total number of cigarette butts collected was `r all_trash_wheel_data |> filter(trash_wheel_name == "Gwynnda, the Good Wheel of the West", year == 2022, month == "June") |> summarize(total_butts = sum(cigarette_butts, na.rm = TRUE)) |> pull(total_butts) |> format(big.mark = ",")`.  
 
 # Problem 3
 This problem analyzes Zillow's Observed Rent Index (ZORI) for New York City from 2015 to 2024. We will import and combine Zillow's rental price data with a separate file containing NYC ZIP code and neighborhood information. The goal is to create a single, tidy dataset to explore rental price trends, particularly during the COVID-19 pandemic.
